@@ -1,0 +1,105 @@
+:root {
+    /* 預設薄荷主題 */
+    --bg: #e7f5f0;
+    --surface: #ffffff;
+    --ink: #1e2426;
+    --primary: #2a8a74;
+    --accent: #e46a5e;
+}
+[data-theme="paper"] {
+    --bg: #f8f4ea;
+    --surface: #ffffff;
+    --ink: #3e3832;
+}
+[data-theme="ink"] {
+    --bg: #1e2426;
+    --surface: #2c3538;
+    --ink: #e7f5f0;
+    --primary: #3db398;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: "Huninn", "Noto Sans TC", sans-serif; /* 圓體字型 */
+    color: var(--ink);
+    background-color: var(--bg);
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; /* 讓點擊穿透到 3D 畫布 */
+    display: flex; flex-direction: column;
+}
+
+header, #toolbar, #theme-controls, #info-panel {
+    pointer-events: auto; /* 恢復 UI 點擊 */
+}
+
+header {
+    padding: 20px;
+    background: linear-gradient(var(--bg), transparent);
+}
+
+header h1 { margin: 0; color: var(--primary); font-size: 24px; }
+header p { margin: 5px 0 0; font-size: 14px; font-weight: bold; }
+
+#toolbar {
+    position: absolute; top: 100px; left: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+}
+
+button {
+    background: var(--surface); color: var(--ink);
+    border: 2px solid var(--primary); border-radius: 8px;
+    padding: 10px 15px; cursor: pointer; font-weight: bold;
+    transition: 0.2s; min-height: 44px; /* 確保觸控範圍 */
+}
+button:hover { background: var(--primary); color: #fff; }
+
+#theme-controls {
+    position: absolute; bottom: 20px; right: 20px;
+    display: flex; gap: 5px;
+}
+
+/* 內容面板 (桌機側邊欄 / 手機底部抽屜) */
+#info-panel {
+    position: absolute; right: 20px; top: 20px; bottom: 20px;
+    width: 350px; background: var(--surface);
+    border-radius: 16px; padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow-y: auto; transition: transform 0.3s;
+}
+#info-panel.hidden { transform: translateX(120%); }
+.accent-text { color: var(--accent); font-weight: bold; }
+
+#btn-close {
+    position: absolute; right: 15px; top: 15px;
+    border: none; background: none; font-size: 20px;
+}
+
+/* RWD 手機版設定 */
+@media (max-width: 768px) {
+    #info-panel {
+        right: 0; top: auto; bottom: 0; width: 100%; height: 60vh;
+        border-radius: 20px 20px 0 0;
+        transform: translateY(0);
+    }
+    #info-panel.hidden { transform: translateY(100%); }
+    #theme-controls { top: 20px; right: 20px; bottom: auto; }
+}
+
+/* HTML 標籤覆蓋層 (Three.js CSS2DObject 使用) */
+.island-label {
+    background: var(--surface); color: var(--ink);
+    padding: 5px 10px; border-radius: 20px;
+    font-size: 12px; font-weight: bold; border: 1px solid var(--primary);
+    cursor: pointer; pointer-events: auto;
+}
+.island-label:hover { background: var(--accent); color: white; border-color: var(--accent); }
