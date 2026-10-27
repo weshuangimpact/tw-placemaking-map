@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="mint">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>台灣地方創生群島地圖</title>
+    <link rel="stylesheet" href="./styles.css">
+    <!-- 引入圓體字型 -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Import Three.js -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+</head>
+<body>
+    <!-- 3D 場景容器 -->
+    <div id="canvas-container"></div>
+
+    <!-- UI 覆蓋層 -->
+    <div id="ui-layer">
+        <header>
+            <h1>台灣地方創生群島地圖</h1>
+            <p>匯集台灣各行政區創生案例、資源與產業數據的互動導覽地圖。</p>
+        </header>
+
+        <!-- 左側工具列 -->
+        <div id="toolbar">
+            <button id="btn-list">📍 地點清單</button>
+            <button id="btn-guide">🤖 小嚮導問答</button>
+            <button id="btn-reset">🌍 回到全景</button>
+        </div>
+
+        <!-- 右下角主題與光線切換 -->
+        <div id="theme-controls">
+            <button onclick="setTheme('mint')" class="theme-btn" style="background:#e7f5f0">薄荷</button>
+            <button onclick="setTheme('paper')" class="theme-btn" style="background:#f8f4ea; color:#3e3832">米紙</button>
+            <button onclick="setTheme('ink')" class="theme-btn" style="background:#1e2426; color:#e7f5f0">墨色</button>
+            <button id="btn-daynight">🌙 切換光線</button>
+        </div>
+
+        <!-- 內容面板 (側邊欄/手機底部抽屜) -->
+        <aside id="info-panel" class="hidden">
+            <button id="btn-close" aria-label="關閉">✖</button>
+            <h2 id="panel-title">島嶼名稱</h2>
+            <p id="panel-intro" class="accent-text">一句話介紹</p>
+            
+            <div class="tabs">
+                <button class="tab-btn active">創生特色</button>
+            </div>
+            
+            <div id="panel-content">
+                <h3>發展重點</h3>
+                <p id="panel-focus">內容...</p>
+                <h3>代表案例</h3>
+                <p id="panel-cases">內容...</p>
+            </div>
+        </aside>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+    <script>
+        // 切換主題色邏輯
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('map-theme', theme);
+            // 觸發自訂事件讓 3D 場景知道顏色換了
+            window.dispatchEvent(new CustomEvent('themeChanged', { detail: theme }));
+        }
+        // 載入上次主題
+        const savedTheme = localStorage.getItem('map-theme') || 'mint';
+        setTheme(savedTheme);
+    </script>
+</body>
+</html>
